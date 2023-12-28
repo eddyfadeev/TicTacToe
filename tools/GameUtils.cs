@@ -1,7 +1,40 @@
-﻿namespace TicTacToe;
+﻿using System.Collections;
 
-static class GameUtils
+namespace TicTacToe;
+
+internal static class GameUtils
 {
+    /**
+    * <summary>
+    * Gets input from the user, check if it exists in passed array or one of predefined chars and returns it.
+    * Prints error message if input is invalid.
+    * </summary>
+    * <param name="options">Array of valid options.</param>
+    * <returns>Valid input from the user as a char.</returns>
+    */
+    internal static char GetInput(char[] options)
+    {
+        // Loop until valid input is received.
+        while (true)
+        {
+            // Get input from the user, trim it and convert to uppercase.
+            string input = Console.ReadLine().Trim().ToUpper();
+            // Try to convert input to char.
+            bool parsed = char.TryParse(input, out char convertedInput);
+            // Check if input exists in passed array.
+            bool exists = options.Contains(convertedInput);
+            
+            // Check if input is valid.
+            if (parsed && exists)
+            {
+                return convertedInput; // Return valid input.
+            } 
+            
+            // Print error message.
+            Console.WriteLine("Invalid input. Please try again.");
+        } // end of while loop.
+    } // end of GetInput(char[]) method.
+    
     /**
     * <summary>
     * Gets int input from the user, check if it is within the range.
