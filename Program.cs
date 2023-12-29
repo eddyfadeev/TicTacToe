@@ -1,5 +1,4 @@
 ﻿using TicTacToe.logic;
-using TicTacToe.logic.objects;
 
 namespace TicTacToe;
 
@@ -9,7 +8,6 @@ class Program
     {
         Game game = new Game();
         game.Start();
-        
         
     }
 }
