@@ -4,9 +4,9 @@ internal class Player
 {
     private static int _nextId = 1;
     public string Name { get; private set; }
-    private readonly Symbol _playerSymbol;
+    private readonly char _playerSymbol;
 
-    public Player(Symbol playerSymbol, string playerName = "Player")
+    public Player(char playerSymbol, string playerName = "Player")
     {
         Name = playerName.Equals("Player") ? $"{playerName} {_nextId}" : playerName;
         _nextId++;
@@ -17,21 +17,41 @@ internal class Player
     
     public void SetName(string name) => Name = name;
     
-    private char GetPlayerSymbol() => _playerSymbol.GetValue();
+    internal char GetPlayerSymbol() => _playerSymbol;
     
-    public bool MakeATurn(Board board, int position)
+    public void MakeATurn(Board board, int position)
     {
-        Console.WriteLine($"{Name}, it's your turn.");
-        if (!board.CheckOccupancy(position))
+        bool isTurnMade = false;
+
+        while (!isTurnMade)
         {
-            Console.WriteLine("This position is already occupied!");
-            return false;
+            var point = position switch
+            {
+                1 => (0, 0),
+                2 => (0, 1),
+                3 => (0, 2),
+                4 => (1, 0),
+                5 => (1, 1),
+                6 => (1, 2),
+                7 => (2, 0),
+                8 => (2, 1),
+                9 => (2, 2),
+            };
+            
+            if (board.CheckOccupancy(point.Item1, point.Item2))
+            {
+                Console.WriteLine("This position is already occupied!");
+                Console.Write("Please, choose another position: ");
+                isTurnMade = false;
+
+                position = GameUtils.GetInput(1, 9);
+            }
+            else
+            {
+                var symbol = GetPlayerSymbol();
+                board.SetOccupied(point.Item1, point.Item2, symbol);
+                isTurnMade = true;
+            }
         }
-        
-        var symbol = new Symbol(GetPlayerSymbol(), position);
-        
-        board.SetOccupied(position, symbol);
-        
-        return true;
     }
 }
